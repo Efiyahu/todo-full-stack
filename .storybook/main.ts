@@ -1,37 +1,16 @@
-const path = require('path');
-const reactRefresh = require('@vitejs/plugin-react-refresh');
-
-module.exports = {
-  stories: [
-    // "../src/**/*.stories.@(js|jsx|ts|tsx)"
-    '../src/components/**/*.stories.@(ts|tsx)',
-  ],
-  // addons: ["@storybook/addon-links", "@storybook/addon-essentials"],
+import type { StorybookConfig } from '@storybook/react-vite';
+const config: StorybookConfig = {
+  stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
+  addons: ['@storybook/addon-links', '@storybook/addon-essentials', '@storybook/addon-interactions'],
+  framework: {
+    name: '@storybook/react-vite',
+    options: {},
+  },
+  docs: {
+    autodocs: 'tag',
+  },
   core: {
-    builder: 'storybook-builder-vite',
-  },
-  resolve: {
-    alias: [
-      {
-        find: '@',
-        replacement: path.resolve(__dirname, './src'),
-      },
-      {
-        find: '@assets',
-        replacement: path.resolve(__dirname, './src/assets'),
-      },
-      {
-        find: '@components',
-        replacement: path.resolve(__dirname, '../src/components'),
-      },
-    ],
-  },
-  async viteFinal(config, { configType }) {
-    // customize the Vite config here
-    config.resolve.alias.foo = 'bar';
-
-    reactRefresh();
-
-    return config;
+    builder: '@storybook/builder-vite', // 👈 The builder enabled here.
   },
 };
+export default config;

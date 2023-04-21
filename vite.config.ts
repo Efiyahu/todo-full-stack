@@ -11,7 +11,9 @@ export default defineConfig({
     svgr(),
     react(),
     tsconfigPaths(),
-    eslint(),
+    eslint({
+      exclude: ['/virtual:/**', 'node_modules/**'],
+    }),
     VitePluginFonts({
       google: {
         families: ['Open Sans'],
