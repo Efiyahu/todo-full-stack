@@ -16,7 +16,7 @@ const GlobalStyle = createGlobalStyle`
     body {
         overflow: overlay;
         margin: 0;
-        background: #292929;
+        background: #222C41;
         font-family: 'Open Sans', sans-serif;
 
         p,h1,h2,h3,h4,h5 , h6 {
