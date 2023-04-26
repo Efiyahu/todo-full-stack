@@ -15,6 +15,7 @@ export type ThemeType = {
       dark: string;
       darkBlue: string;
       lightBlue: string;
+      gray: string;
     };
     button: ButtonType;
   };
@@ -33,6 +34,7 @@ const theme: ThemeType = {
       dark: '#131517',
       darkBlue: '#1E1F25',
       lightBlue: '#5051F9',
+      gray: '#768396',
     },
     button: {
       default: '#F15A59',
@@ -44,9 +46,9 @@ const theme: ThemeType = {
     },
   },
   priority: {
-    High: 'red',
-    Medium: 'yellow',
-    Low: 'green',
+    High: '#F15A59',
+    Medium: '#FC9858',
+    Low: '#2CDE9A',
   },
 };
 

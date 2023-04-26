@@ -20,21 +20,23 @@ const Card = ({ index, title, description, priority, date, id, onDeleteTodo }: P
           maxWidth: 275,
           width: '100%',
           '& .MuiPaper-root': {
-            height: 150,
+            maxHeight: 150,
             boxSizing: 'border-box',
+            background: '#1E1F25',
+            borderRadius: '10px',
           },
         }}
       >
         <MuiCard>
           <StyledCardContent>
             <StyledDeleteIcon onClick={() => onDeleteTodo(id)} stroke="lightgray" fill="lightgray" />
+            <Priority priority={priority}>{priority}</Priority>
             <TextWrapper>
               <Title>{title}</Title>
               <Description>{description}</Description>
             </TextWrapper>
 
             <Wrapper>
-              <Priority priority={priority}>{priority}</Priority>
               <Date>{date?.toString()}</Date>
             </Wrapper>
           </StyledCardContent>
@@ -56,21 +58,32 @@ const StyledCardContent = styled(CardContent)`
 `;
 
 const Title = styled.h4`
-  font-size: 1.5rem;
+  font-size: 1rem;
+  color: ${({ theme }) => theme.colors.primary.light};
   font-weight: 600;
 `;
 
-const Date = styled.p``;
+const Date = styled.p`
+  font-size: 0.75rem;
+  color: ${({ theme }) => theme.colors.primary.light};
+  font-weight: 500;
+  padding: 0 5px;
+`;
 const Description = styled.p`
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   font-weight: 300;
-  color: #292929;
+  color: ${({ theme }) => theme.colors.primary.gray};
 `;
 
 const Priority = styled.span<{ priority: 'High' | 'Low' | 'Medium' }>`
+  align-self: flex-start;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.primary.light};
   background: ${({ theme, priority }) => theme.priority[priority]};
   padding: 5px 15px;
   border-radius: 10px;
+  margin-bottom: 15px;
 `;
 
 const Wrapper = styled.div`
@@ -79,21 +92,13 @@ const Wrapper = styled.div`
   width: 100%;
   justify-content: space-between;
   position: relative;
-
-  ::before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 1px;
-    background: #eee;
-    top: -10px;
-  }
 `;
 
 const TextWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-self: flex-start;
+  margin-bottom: 16px;
 `;
 
 const StyledDeleteIcon = styled(Delete)`

@@ -3,6 +3,7 @@ import { Droppable } from 'react-beautiful-dnd';
 import Card from 'components/Card/Card';
 import { format } from 'date-fns';
 import { Todo } from 'types';
+import { ReactComponent as Add } from 'assets/svgs/add.svg';
 
 type Props = {
   title: string;
@@ -15,7 +16,10 @@ const CardList = ({ title, droppableId = 'todo', data, onDeleteTodo }: Props) =>
   <Droppable droppableId={droppableId}>
     {provided => (
       <Container ref={provided.innerRef} {...provided.droppableProps}>
-        <Title>{title}</Title>
+        <Title>
+          <h5>{title}</h5>
+          <Add />
+        </Title>
         {data?.map(({ title: todoTitle, description, date, priority, status, id }, index) => (
           <Card
             onDeleteTodo={onDeleteTodo}
@@ -24,7 +28,7 @@ const CardList = ({ title, droppableId = 'todo', data, onDeleteTodo }: Props) =>
             title={todoTitle}
             description={description}
             priority={priority}
-            date={format(new Date(date), 'dd/mm/yy')}
+            date={format(new Date(date), 'MMM dd,yyyy')}
             status={status}
             id={id}
           />
@@ -37,9 +41,8 @@ const CardList = ({ title, droppableId = 'todo', data, onDeleteTodo }: Props) =>
 export default CardList;
 
 const Container = styled.div`
-  background-color: rgba(192, 192, 192, 0.2);
-  width: 300px;
-  border-radius: 10px;
+  max-width: 250px;
+  width: 30%;
   height: 500px;
   display: flex;
   flex-direction: column;
@@ -50,13 +53,13 @@ const Container = styled.div`
   padding-bottom: 30px;
 `;
 
-const Title = styled.h2`
-  color: #eee;
-  position: sticky;
-  top: 0;
+const Title = styled.div`
+  cursor: default;
+  display: flex;
   width: 100%;
-  padding: 10px 0;
-  background-color: #292929;
-  text-align: center;
-  z-index: 2;
+  padding: 10px 20px;
+  align-items: center;
+  justify-content: space-between;
+  background-color: ${({ theme }) => theme.colors.primary.darkBlue};
+  border-radius: 10px;
 `;

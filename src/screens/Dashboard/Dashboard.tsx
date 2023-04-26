@@ -92,7 +92,7 @@ const Dashboard = () => {
           <Button text="Add todo" onClick={() => setOpen(true)} />
         </TopWrapper>
         <Wrapper>
-          <CardList onDeleteTodo={onDeleteTodo} data={originalTodos} droppableId="todo" title="Todo" />
+          <CardList onDeleteTodo={onDeleteTodo} data={originalTodos} droppableId="todo" title="To Do" />
           <CardList onDeleteTodo={onDeleteTodo} data={originalInProgress} droppableId="progress" title="In progress" />
           <CardList onDeleteTodo={onDeleteTodo} data={originalDone ?? []} droppableId="done" title="Done" />
         </Wrapper>

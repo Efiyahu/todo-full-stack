@@ -24,6 +24,14 @@ const Routes = () => {
           path: '/settings',
           element: <User />,
         },
+        {
+          path: '/files',
+          element: <User />,
+        },
+        {
+          path: '/calendar',
+          element: <User />,
+        },
       ],
     },
     {
