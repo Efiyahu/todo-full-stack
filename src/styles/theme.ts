@@ -12,8 +12,16 @@ export type ThemeType = {
     primary: {
       light: string;
       default: string;
+      dark: string;
+      darkBlue: string;
+      lightBlue: string;
     };
     button: ButtonType;
+  };
+  priority: {
+    Low: string;
+    Medium: string;
+    High: string;
   };
 };
 
@@ -22,6 +30,9 @@ const theme: ThemeType = {
     primary: {
       light: '#eee',
       default: '#F15A59',
+      dark: '#131517',
+      darkBlue: '#1E1F25',
+      lightBlue: '#5051F9',
     },
     button: {
       default: '#F15A59',
@@ -31,6 +42,11 @@ const theme: ThemeType = {
       opacity: 'rgba(241,90,89,.3)',
       text: '#eee',
     },
+  },
+  priority: {
+    High: 'red',
+    Medium: 'yellow',
+    Low: 'green',
   },
 };
 

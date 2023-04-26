@@ -38,12 +38,10 @@ const Login = () => {
   }: UseMutationResult<unknown, LoginError, Partial<User>> = useMutation(['register'], API.login, {
     onSuccess: data => {
       localStorage.setItem('token', data.data.token);
-      localStorage.setItem('user', data.data.user.email);
+      localStorage.setItem('user', JSON.stringify(data.data.user));
       navigate('/dashboard');
     },
   });
-
-  console.log(error?.response?.data?.msg);
 
   const onSubmit: SubmitHandler<Partial<User>> = data => loginUser(data);
 

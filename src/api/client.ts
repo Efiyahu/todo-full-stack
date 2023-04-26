@@ -9,14 +9,9 @@ const appServerConfig: AxiosRequestConfig = {
 const createAppAxiosInstance = () => axios.create(appServerConfig);
 export const appRequest: AxiosInstance = createAppAxiosInstance();
 
-// appRequest.interceptors.request.use(req => {
-//   const token = localStorage.getItem('token');
-//   if (!token) return req;
-//   return {
-//     ...req,
-//     headers: {
-//       ...(req.headers ?? {}),
-//       Authorization: `Bearer ${token}`,
-//     },
-//   };
-// });
+const todoServerConfig: AxiosRequestConfig = {
+  baseURL: Url.TodoBaseUrl,
+};
+
+const createTodoAxiosInstance = () => axios.create(todoServerConfig);
+export const todoRequest: AxiosInstance = createTodoAxiosInstance();

@@ -1,91 +1,77 @@
-/* eslint-disable react/jsx-key */
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
-import styled from 'styled-components';
-import { Divider, List as MuiList, Toolbar as MuiToolbar } from '@mui/material';
-import ListItem from 'components/ListItem/ListItem';
-
-const drawerWidth = 240;
+import styled, { css } from 'styled-components';
+import { ReactComponent as Dashboard } from 'assets/svgs/dashboard.svg';
+import { ReactComponent as Calendar } from 'assets/svgs/calendar.svg';
+import { ReactComponent as Settings } from 'assets/svgs/settings.svg';
+import { ReactComponent as Files } from 'assets/svgs/files.svg';
+import { useLocation } from 'react-router-dom';
 
 type Props = {
-  title: string;
-  listItems: string[];
-  iconsArray?: JSX.Element[];
-  onClickItem: (text: string) => void;
+  onClickItem: (name: string) => void;
 };
 
-const Navbar = ({ title, listItems, iconsArray, onClickItem }: Props) => (
-  <Box sx={{ display: 'flex' }}>
-    <Drawer
-      sx={{
-        width: drawerWidth,
-        flexShrink: 0,
-        '& .MuiDrawer-paper': {
-          width: drawerWidth,
-          height: '90%',
-          maxHeight: '800px',
-          boxSizing: 'border-box',
-          margin: '10px',
-          borderRadius: '20px',
-          background: '#2E384E',
-        },
-      }}
-      variant="permanent"
-      anchor="left"
-    >
-      <List>
-        <Toolbar>
-          <h4>{title}</h4>
-        </Toolbar>
-        <Divider sx={{ background: '#eee' }} />
-        {listItems.map((text, index) => (
-          <ListItem onClick={() => onClickItem(text)} text={text} icon={iconsArray?.[index]} />
-        ))}
-      </List>
-    </Drawer>
-  </Box>
-);
+const Navbar = ({ onClickItem }: Props) => {
+  const { pathname } = useLocation();
+  return (
+    <Container>
+      <ListWrapper>
+        <ListItem active={pathname.includes('dashboard')} onClick={() => onClickItem('dashboard')}>
+          <Dashboard />
+        </ListItem>
+        <ListItem active={pathname.includes('calendar')} onClick={() => onClickItem('calendar')}>
+          <Calendar />
+        </ListItem>
+        <ListItem active={pathname.includes('settings')} onClick={() => onClickItem('settings')}>
+          <Settings />
+        </ListItem>
+        <ListItem active={pathname.includes('files')} onClick={() => onClickItem('files')}>
+          <Files />
+        </ListItem>
+      </ListWrapper>
+    </Container>
+  );
+};
 
 export default Navbar;
 
-const List = styled(MuiList)`
-  margin-top: 50px;
-  height: 100%;
+const Container = styled.nav`
+  width: 94px;
+  background: ${({ theme }) => theme.colors.primary.darkBlue};
+  height: 100vh;
   display: flex;
-  flex-direction: column;
-  justify-content: start;
-
-  .MuiListItem-root {
-    transition: all 1s;
-    .MuiButtonBase-root {
-      display: flex;
-      align-items: center;
-    }
-    color: ${({ theme }) => theme.colors.primary.light};
-    .MuiListItemIcon-root {
-      padding-left: 20px;
-    }
-
-    :hover {
-      background-color: none;
-      .MuiListItemText-root,
-      .MuiListItemIcon-root {
-        transition: all 0.3s ease-in-out;
-        transform: translateX(5px);
-      }
-    }
-  }
+  position: fixed;
 `;
 
-const Toolbar = styled(MuiToolbar)`
+const ListWrapper = styled.ul`
   display: flex;
+  flex-direction: column;
+  width: 100%;
   align-items: center;
-  justify-content: center;
 
-  h4 {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: ${({ theme }) => theme.colors.primary.light};
-    cursor: default;
+  list-style: none;
+  padding: 0;
+  margin-top: 76px;
+`;
+
+const ListItem = styled.li<{ active: boolean }>`
+  margin: 20px 0;
+  padding: 12px 14px;
+  cursor: pointer;
+  border-radius: 14px;
+  border-radius: 14px;
+  :hover {
+    path {
+      transition: all 0.5s;
+      fill: ${({ theme }) => theme.colors.primary.light};
+    }
   }
+  ${({ active }) =>
+    active &&
+    css`
+      background: ${({ theme }) => theme.colors.primary.lightBlue};
+      path {
+        transition: all 0.5s;
+        box-shadow: 0px 8px 14px rgba(62, 107, 224, 0.12);
+        fill: ${({ theme }) => theme.colors.primary.light};
+      }
+    `}
 `;
