@@ -24,10 +24,8 @@ const Layout = ({ children }: Props) => {
 export default Layout;
 
 const Container = styled.div`
-  background-color: #2e384e;
   margin-left: 100px;
   height: 100%;
-  border-radius: 10px;
 `;
 
 const TopSection = styled.div`
