@@ -10,6 +10,7 @@ const ListItem = ({ icon, text, onClick }: Props) => (
   <MuiListItem key={text} disablePadding>
     <ListItemButton onClick={onClick}>
       <ListItemIcon>{icon}</ListItemIcon>
+      <ListItemText primary={text} />
     </ListItemButton>
   </MuiListItem>
 );
