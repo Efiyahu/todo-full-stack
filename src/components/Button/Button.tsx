@@ -22,6 +22,7 @@ const StyledButton = styled(MuiButton)<{ variant: Variant }>`
     border-radius: 6px;
     padding: 5px 20px;
     transition: all 0.3s;
+    min-width: 120px;
 
     ${({ variant }) =>
       variant === ButtonVariant.Contained

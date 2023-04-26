@@ -1,37 +1,38 @@
 /* eslint-disable react/jsx-key */
 import * as React from 'react';
 import Navbar from 'components/Navbar/Navbar';
-import { ReactComponent as Profile } from 'assets/svgs/profile.svg';
-import { ReactComponent as LeftArrow } from 'assets/svgs/leftArrow.svg';
-import { ReactComponent as Settings } from 'assets/svgs/settings.svg';
 import { useNavigate } from 'react-router-dom';
-import API from 'api/methods';
-
-const listItemIconArray = [<Settings height={20} />, <Profile height={20} />, <LeftArrow height={20} />];
+import styled from 'styled-components';
 
 type Props = React.PropsWithChildren;
 
 const Layout = ({ children }: Props) => {
   const navigate = useNavigate();
-  const onClickItem = (text: string) => {
-    if (text !== 'Logout') {
-      navigate(`/${text.toLowerCase()}`);
-    } else {
-      API.logout();
-    }
+  const onClickItem = (name: string) => {
+    navigate(`/${name}`);
   };
 
   return (
     <div>
-      <Navbar
-        onClickItem={onClickItem}
-        title="What to do?"
-        iconsArray={listItemIconArray}
-        listItems={['Dashboard', 'Settings', 'Logout']}
-      />
-      {children}
+      <Navbar onClickItem={onClickItem} />
+      <TopSection />
+      <Container>{children}</Container>
     </div>
   );
 };
 
 export default Layout;
+
+const Container = styled.div`
+  background-color: #2e384e;
+  margin-left: 100px;
+  height: 100%;
+  border-radius: 10px;
+`;
+
+const TopSection = styled.div`
+  width: 100vw;
+  height: 76px;
+  background: ${({ theme }) => theme.colors.primary.darkBlue};
+  margin-bottom: 20px;
+`;
