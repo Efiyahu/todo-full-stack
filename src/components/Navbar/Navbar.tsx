@@ -39,6 +39,7 @@ const Container = styled.nav`
   height: 100vh;
   display: flex;
   position: fixed;
+  margin-top: 76px;
 `;
 
 const ListWrapper = styled.ul`
