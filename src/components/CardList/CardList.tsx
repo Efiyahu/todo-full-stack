@@ -60,7 +60,7 @@ const CardList = ({
 export default CardList;
 
 const Container = styled.div`
-  max-width: 250px;
+  min-width: 300px;
   width: 100%;
   height: 600px;
   display: flex;
@@ -103,5 +103,5 @@ const Title = styled.div`
 `;
 
 const MainContainer = styled.div`
-  width: 14.4%;
+  width: 15.9%;
 `;

@@ -59,10 +59,27 @@ const GlobalStyle = createGlobalStyle`
 
     div {
         ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar:horizontal {
+    height: 10px;
+
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-right: 4px solid transparent;
+    border-left: 1px solid transparent;
+    background-color: #292929;
+    background-clip: padding-box;
+    border-radius: 4px 8px 8px 4px;
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+          }
+  ::-webkit-scrollbar-corner {
     display: none;
   }
-}
-
+    }
 `;
 
 export default GlobalStyle;
