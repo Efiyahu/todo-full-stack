@@ -2,15 +2,19 @@ import styled from 'styled-components';
 import Logo from 'assets/imgs/logo.png';
 import Button from 'components/Button/Button';
 import API from 'api/methods';
+import { useNavigate } from 'react-router-dom';
 
-const TopSection = () => (
-  <Container>
-    <StyledLogo src={Logo} alt="logo" />
-    <Wrapper>
-      <Button variant="outlined" text="Log Out" onClick={() => API.logout()} />
-    </Wrapper>
-  </Container>
-);
+const TopSection = () => {
+  const navigate = useNavigate();
+  return (
+    <Container>
+      <StyledLogo onClick={() => navigate('/dashboard')} src={Logo} alt="logo" style={{ cursor: 'pointer' }} />
+      <Wrapper>
+        <Button variant="outlined" text="Log Out" onClick={() => API.logout()} />
+      </Wrapper>
+    </Container>
+  );
+};
 
 export default TopSection;
 

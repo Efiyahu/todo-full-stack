@@ -8,8 +8,11 @@ export type Todo = {
   id: string;
   title: string;
   description: string;
-  status: 'todo' | 'progress' | 'done';
-  priority: 'High' | 'Low' | 'Medium';
+  status: Status;
+  priority: Priority;
   date: string;
   order: number;
 };
+
+export type Status = 'todo' | 'progress' | 'done';
+export type Priority = 'High' | 'Low' | 'Medium';

@@ -23,9 +23,9 @@ const StyledTextField = styled(TextField)`
   .MuiInputBase-root {
     width: 280px;
     height: 48px;
-    background-color: #292f3a;
+    background-color: ${({ theme }) => theme.colors.primary.darkBlue};
     border-radius: 10px;
-    color: #eee;
+    color: ${({ theme }) => theme.colors.primary.light};
     transition: all 1s;
 
     &:hover fieldset {

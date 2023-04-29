@@ -43,6 +43,15 @@ const API = {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
     }),
+
+  getUserImage: async (userId: string) =>
+    appRequest
+      .get(`/user-image/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
+      .then(res => res.data),
 };
 
 export default API;

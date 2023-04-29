@@ -1,13 +1,13 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import Modal from '@mui/material/Modal';
+import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
 import styled from 'styled-components';
 import Input from 'components/Input/Input';
-import Button from 'components/Button';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import API from 'api/methods';
+import Modal from './Modal';
+import Select from 'components/Select/Select';
+import { Priority, Status } from 'types';
 
 type Props = {
   open: boolean;
@@ -15,11 +15,11 @@ type Props = {
   refetch: () => Promise<void>;
 };
 
-export interface TodoFormValues {
+export interface TodoFormValues extends FieldValues {
   title: string;
   description: string;
-  priority?: 'Low' | 'Medium' | 'High';
-  status?: 'todo' | 'progress' | 'done';
+  priority?: Priority;
+  status?: Status;
 }
 
 const AddTodoModal = ({ open, handleClose, refetch }: Props) => {
@@ -30,13 +30,14 @@ const AddTodoModal = ({ open, handleClose, refetch }: Props) => {
     await API.addTodo(data);
     await refetch();
     handleClose();
+    reset();
   };
 
   const validationSchema = React.useMemo(
     () =>
       yup.object({
         title: yup.string().required('Title is required').min(3).max(20),
-        description: yup.string().required('Description is required'),
+        description: yup.string().min(6).required('Description is required'),
       }),
     []
   );
@@ -45,72 +46,89 @@ const AddTodoModal = ({ open, handleClose, refetch }: Props) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<TodoFormValues>({ resolver: yupResolver(validationSchema) });
+    control,
+    reset,
+  } = useForm<TodoFormValues>({
+    resolver: yupResolver(validationSchema),
+    defaultValues: {
+      priority: 'Low',
+      status: 'todo',
+    },
+  });
 
   return (
     <Modal
-      sx={{ outline: 'none' }}
+      modalStyles={{ outline: 'none' }}
       open={open}
-      onClose={handleClose}
+      onClose={() => {
+        handleClose();
+        reset();
+      }}
+      title="Add Todo"
+      asForm
+      onSubmitForm={handleSubmit(onSubmit)}
+      buttons={[
+        {
+          variant: 'outlined',
+          text: 'Cancel',
+          onClick: () => {
+            handleClose();
+            reset();
+          },
+        },
+        {
+          variant: 'contained',
+          text: 'Confirm',
+          type: 'submit',
+        },
+      ]}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
-    >
-      <Container>
-        <Title>Add new Todo</Title>
-        <FormWrapper onSubmit={handleSubmit(onSubmit)}>
-          <Input label="Title" {...register('title')} error={!!errors.title} helperText={errors.title?.message} />
-          <Input
-            {...register('description')}
-            label="Description"
-            error={!!errors.description}
-            helperText={errors.description?.message}
-          />
-          <Input {...register('priority')} label="Priority" />
-          <Input {...register('status')} label="Status" />
-          <ButtonContainer>
-            <Button variant="outlined" text="Cancel" onClick={handleClose} />
-            <Button variant="contained" text="Save" type="submit" />
-          </ButtonContainer>
-        </FormWrapper>
-      </Container>
-    </Modal>
+      containerStyles={{
+        width: 700,
+      }}
+      content={
+        <>
+          <FormWrapper>
+            <Input label="Title" {...register('title')} error={!!errors.title} helperText={errors.title?.message} />
+            <Input
+              {...register('description')}
+              label="Description"
+              error={!!errors.description}
+              helperText={errors.description?.message}
+            />
+            <Select
+              autoWidth={false}
+              multiple={false}
+              native={false}
+              data={['Low', 'Medium', 'High']}
+              {...register('priority')}
+              label="Priority"
+              control={control}
+            />
+            <Select
+              control={control}
+              autoWidth={false}
+              multiple={false}
+              native={false}
+              data={['todo', 'progress', 'done']}
+              {...register('status')}
+              label="Status"
+            />
+          </FormWrapper>
+        </>
+      }
+    />
   );
 };
 
 export default AddTodoModal;
 
-const Container = styled(Box)`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 700px;
-  background: #2e384e;
-  box-shadow: 24;
-  outline: none;
-  padding: 40px;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  border-radius: 10px;
-`;
-
-const Title = styled.h3`
-  color: ${({ theme }) => theme.colors.primary.light};
-  margin-bottom: 30px;
-`;
-
-const FormWrapper = styled.form`
+const FormWrapper = styled.div`
+  padding: 20px 0;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 40px;
   flex-wrap: wrap;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  margin-top: 20px;
 `;

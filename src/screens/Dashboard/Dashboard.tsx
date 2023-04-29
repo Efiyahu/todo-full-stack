@@ -7,24 +7,38 @@ import AddTodoModal from 'components/Modal';
 import { useQuery } from '@tanstack/react-query';
 import API from 'api/methods';
 import { Todo } from 'types';
-import Button from 'components/Button/Button';
+import DeleteTodo from './modals/DeleteTodo';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  const [disabled, setDisabled] = React.useState<boolean>(false);
+  const [openDelete, setOpenDelete] = React.useState<boolean>(false);
+  const [deleteTodoId, setDeleteTodoId] = React.useState<string>('');
   const [originalTodos, setOriginalTodos] = React.useState<Todo[]>([]);
   const [originalDone, setOriginalDone] = React.useState<Todo[]>([]);
   const [originalInProgress, setOriginalInProgress] = React.useState<Todo[]>([]);
-  const { data: todos, refetch: refetchTodos } = useQuery<Todo[]>(['getTodos'], () => API.getTodos('todo'), {
+  const {
+    data: todos,
+    refetch: refetchTodos,
+    isFetching: isFetchingTodos,
+  } = useQuery<Todo[]>(['getTodos'], () => API.getTodos('todo'), {
     onSuccess: data => setOriginalTodos(data),
   });
-  const { data: inProgress, refetch: refetchInProgress } = useQuery<Todo[]>(
-    ['getInProgress'],
-    () => API.getTodos('progress'),
-    {
-      onSuccess: data => setOriginalInProgress(data),
-    }
-  );
+  const {
+    data: inProgress,
+    refetch: refetchInProgress,
+    isFetching: isFetchingInProgress,
+    isLoading,
+  } = useQuery<Todo[]>(['getInProgress'], () => API.getTodos('progress'), {
+    onSuccess: data => setOriginalInProgress(data),
+  });
 
-  const { data: done, refetch: refetchDone } = useQuery<Todo[]>(['getDone'], () => API.getTodos('done'), {
+  const {
+    data: done,
+    refetch: refetchDone,
+    isFetching: isFetchingDone,
+  } = useQuery<Todo[]>(['getDone'], () => API.getTodos('done'), {
     onSuccess: data => setOriginalDone(data),
   });
 
@@ -72,29 +86,69 @@ const Dashboard = () => {
     setOriginalTodos([...copyTodos]);
     setOriginalInProgress([...copyInProgress]);
     setOriginalDone([...copyDone]);
-    await API.updateTodos(copyTodos);
-    await API.updateTodos(copyInProgress);
-    await API.updateTodos(copyDone);
+
+    setDisabled(true);
+    await Promise.all([API.updateTodos(copyTodos), API.updateTodos(copyInProgress), API.updateTodos(copyDone)]);
     await refetchAll();
+    setDisabled(false);
   };
 
   const onDeleteTodo = async (todoId: string) => {
     await API.deleteTodo(todoId);
     await refetchAll();
+    setOpenDelete(false);
+  };
+
+  const onClickDelete = (todoId: string) => {
+    setOpenDelete(true);
+    setDeleteTodoId(todoId);
+  };
+
+  const onClickCard = (cardId: string) => {
+    navigate(`/dashboard/${cardId}`);
   };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
+      <DeleteTodo
+        todoId={deleteTodoId}
+        title="Delete Todo"
+        onDelete={onDeleteTodo}
+        open={openDelete}
+        onCancel={() => setOpenDelete(false)}
+      />
       <AddTodoModal open={open} handleClose={() => setOpen(false)} refetch={refetchAll} />
       <Container>
         <TopWrapper>
           <Title>Dashboard</Title>
-          <Button text="Add todo" onClick={() => setOpen(true)} />
         </TopWrapper>
         <Wrapper>
-          <CardList onDeleteTodo={onDeleteTodo} data={originalTodos} droppableId="todo" title="To Do" />
-          <CardList onDeleteTodo={onDeleteTodo} data={originalInProgress} droppableId="progress" title="In progress" />
-          <CardList onDeleteTodo={onDeleteTodo} data={originalDone ?? []} droppableId="done" title="Done" />
+          <CardList
+            onClickCard={onClickCard}
+            onAddTodo={() => setOpen(true)}
+            onClickDelete={onClickDelete}
+            data={originalTodos}
+            droppableId="todo"
+            title="To Do"
+            showButton
+            disabledDrag={disabled}
+          />
+          <CardList
+            onClickCard={onClickCard}
+            onClickDelete={onClickDelete}
+            data={originalInProgress}
+            droppableId="progress"
+            title="In progress"
+            disabledDrag={disabled}
+          />
+          <CardList
+            onClickCard={onClickCard}
+            onClickDelete={onClickDelete}
+            data={originalDone ?? []}
+            droppableId="done"
+            title="Done"
+            disabledDrag={disabled}
+          />
         </Wrapper>
       </Container>
     </DragDropContext>
