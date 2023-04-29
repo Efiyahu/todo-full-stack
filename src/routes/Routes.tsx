@@ -1,4 +1,4 @@
-import { useRoutes, RouteObject } from 'react-router-dom';
+import { useRoutes, RouteObject, Navigate } from 'react-router-dom';
 import Protected from 'screens/Protected/Protected';
 import Dashboard from 'screens/Dashboard/Dashboard';
 import User from 'screens/User/User';
@@ -17,8 +17,16 @@ const Routes = () => {
       ),
       children: [
         {
+          path: '/',
+          element: <Navigate to="/dashboard" replace />,
+        },
+        {
           path: '/dashboard',
           element: <Dashboard />,
+        },
+        {
+          path: '/dashboard/:id',
+          element: <div>Hello</div>,
         },
         {
           path: '/settings',

@@ -3,33 +3,30 @@ import { ReactComponent as Dashboard } from 'assets/svgs/dashboard.svg';
 import { ReactComponent as Calendar } from 'assets/svgs/calendar.svg';
 import { ReactComponent as Settings } from 'assets/svgs/settings.svg';
 import { ReactComponent as Files } from 'assets/svgs/files.svg';
-import { useLocation } from 'react-router-dom';
 
 type Props = {
   onClickItem: (name: string) => void;
+  pathname: string;
 };
 
-const Navbar = ({ onClickItem }: Props) => {
-  const { pathname } = useLocation();
-  return (
-    <Container>
-      <ListWrapper>
-        <ListItem active={pathname.includes('dashboard')} onClick={() => onClickItem('dashboard')}>
-          <Dashboard />
-        </ListItem>
-        <ListItem active={pathname.includes('calendar')} onClick={() => onClickItem('calendar')}>
-          <Calendar />
-        </ListItem>
-        <ListItem active={pathname.includes('settings')} onClick={() => onClickItem('settings')}>
-          <Settings />
-        </ListItem>
-        <ListItem active={pathname.includes('files')} onClick={() => onClickItem('files')}>
-          <Files />
-        </ListItem>
-      </ListWrapper>
-    </Container>
-  );
-};
+const Navbar = ({ onClickItem, pathname }: Props) => (
+  <Container>
+    <ListWrapper>
+      <ListItem active={pathname?.includes('dashboard')} onClick={() => onClickItem('dashboard')}>
+        <Dashboard />
+      </ListItem>
+      <ListItem active={pathname?.includes('calendar')} onClick={() => onClickItem('calendar')}>
+        <Calendar />
+      </ListItem>
+      <ListItem active={pathname?.includes('settings')} onClick={() => onClickItem('settings')}>
+        <Settings />
+      </ListItem>
+      <ListItem active={pathname?.includes('files')} onClick={() => onClickItem('files')}>
+        <Files />
+      </ListItem>
+    </ListWrapper>
+  </Container>
+);
 
 export default Navbar;
 

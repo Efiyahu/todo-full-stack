@@ -6,23 +6,42 @@ import FormControl from '@mui/material/FormControl';
 import { Select as MuiSelect } from '@mui/material';
 import styled from 'styled-components';
 import { SelectInputProps } from '@mui/material/Select/SelectInput';
+import { Control, Controller, FieldValues } from 'react-hook-form';
+import { TodoFormValues } from 'components/Modal/AddTodoModal';
+import { StatusEnum, PriorityEnum } from 'utils/enums';
+import { Priority, Status } from 'types';
 
 interface Props extends SelectInputProps {
   data: string[];
   label: string;
+  name: string;
+  control?: Control<TodoFormValues, unknown>;
 }
 
-const Select = React.forwardRef<HTMLDivElement, Props>(({ data, label }: Props) => (
+const Select = React.forwardRef<HTMLDivElement, Props>(({ data, label, name, control }: Props, ref) => (
   <Box sx={{ minWidth: 120 }}>
-    <StyledFormControl fullWidth>
-      <InputLabel id="demo-simple-select-label">{label}</InputLabel>
-      <StyledSelect labelId="demo-simple-select-label" id="demo-simple-select" label="Age">
-        {data?.map(item => (
-          <MenuItem key={crypto.randomUUID()} value={item}>
-            {item}
-          </MenuItem>
-        ))}
-      </StyledSelect>
+    <StyledFormControl fullWidth ref={ref}>
+      <InputLabel id={`${name}-label`}>{label}</InputLabel>
+      <Controller
+        name={name}
+        control={control as unknown as Control<FieldValues>}
+        render={({ field }) => (
+          <StyledSelect
+            {...field}
+            labelId={`${name}-label`}
+            id={name}
+            label={label}
+            value={field.value}
+            defaultValue={data[0]}
+          >
+            {data?.map(item => (
+              <MenuItem key={crypto.randomUUID()} value={item}>
+                {label === 'Priority' ? PriorityEnum[item as Priority] : StatusEnum[item as Status]}
+              </MenuItem>
+            ))}
+          </StyledSelect>
+        )}
+      />
     </StyledFormControl>
   </Box>
 ));
@@ -35,7 +54,7 @@ const StyledSelect = styled(MuiSelect)`
   &.MuiInputBase-root {
     width: 280px;
     height: 48px;
-    background-color: #292f3a;
+    background-color: ${({ theme }) => theme.colors.primary.darkBlue};
     border-radius: 10px;
     color: #eee;
     transition: all 1s;

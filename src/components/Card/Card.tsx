@@ -6,11 +6,13 @@ import { ReactComponent as Delete } from 'assets/svgs/delete.svg';
 
 type Props = {
   index: number;
-  onDeleteTodo: (todoId: string) => void;
+  onClickDelete: (todoId: string) => void;
+  onClickCard: (cardId: string) => void;
+  disabledDrag: boolean;
 } & Omit<Todo, 'order'>;
 
-const Card = ({ index, title, description, priority, date, id, onDeleteTodo }: Props) => (
-  <Draggable draggableId={id} index={index}>
+const Card = ({ index, title, description, priority, date, id, onClickDelete, onClickCard, disabledDrag }: Props) => (
+  <Draggable draggableId={id} isDragDisabled={disabledDrag} index={index}>
     {provided => (
       <Box
         {...provided.draggableProps}
@@ -27,9 +29,9 @@ const Card = ({ index, title, description, priority, date, id, onDeleteTodo }: P
           },
         }}
       >
-        <MuiCard>
+        <MuiCard onClick={() => onClickCard(id)}>
           <StyledCardContent>
-            <StyledDeleteIcon onClick={() => onDeleteTodo(id)} stroke="lightgray" fill="lightgray" />
+            <StyledDeleteIcon onClick={() => onClickDelete(id)} stroke="lightgray" fill="lightgray" />
             <Priority priority={priority}>{priority}</Priority>
             <TextWrapper>
               <Title>{title}</Title>

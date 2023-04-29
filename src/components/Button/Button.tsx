@@ -1,15 +1,15 @@
-import { Button as MuiButton, ButtonProps } from '@mui/material';
+import { Button as MuiButton, ButtonProps as MuiButtonProps } from '@mui/material';
 import styled, { css } from 'styled-components';
 import { ButtonVariant } from 'utils/enums';
 
 type Variant = 'text' | 'outlined' | 'contained';
 
-interface Props extends ButtonProps {
+export type ButtonProps = MuiButtonProps & {
   text: string;
   loading?: boolean;
-}
+};
 
-const Button = ({ text, variant = 'contained', ...props }: Props) => (
+const Button = ({ text, variant = 'contained', ...props }: ButtonProps) => (
   <StyledButton variant={variant} {...props}>
     {text}
   </StyledButton>
