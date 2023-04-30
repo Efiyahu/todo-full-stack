@@ -52,6 +52,27 @@ const API = {
         },
       })
       .then(res => res.data),
+
+  getTodo: async (todoId: string) =>
+    todoRequest
+      .get(`/${todoId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
+      .then(res => res.data.todo),
+  updateTodo: async ({ updatedTodo, todoId }: { updatedTodo: TodoFormValues; todoId: string }) =>
+    todoRequest
+      .patch(
+        `/${todoId}`,
+        { ...updatedTodo },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      )
+      .then(res => res.data),
 };
 
 export default API;

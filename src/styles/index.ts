@@ -57,7 +57,7 @@ const GlobalStyle = createGlobalStyle`
         list-style: none;
     }
 
-    div {
+    div,textarea {
         ::-webkit-scrollbar {
     width: 8px;
   }

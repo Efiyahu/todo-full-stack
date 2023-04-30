@@ -2,11 +2,12 @@ import styled, { css } from 'styled-components';
 import { ReactComponent as UserSettings } from 'assets/svgs/user.svg';
 import { useQuery } from '@tanstack/react-query';
 import API from 'api/methods';
+import { Skeleton } from '@mui/material';
 
 const User = () => {
   const user = localStorage.getItem('user');
   const { id } = JSON.parse(user ?? '');
-  const { data: userImage, isLoading } = useQuery(['getUserImage'], () => API.getUserImage(id));
+  const { data: userImage, isFetching: isFetchingUserImage } = useQuery(['getUserImage'], () => API.getUserImage(id));
 
   console.log(userImage?.avatar);
 
@@ -14,8 +15,13 @@ const User = () => {
     <Container>
       <Wrapper>
         <UserSettings></UserSettings>
-        <UserAvatar avatar={userImage?.avatar}></UserAvatar>
+        {isFetchingUserImage ? (
+          <StyledSkeleton variant="circular" width={100} height={100} sx={{ bgcolor: 'grey.900' }} />
+        ) : (
+          <UserAvatar avatar={userImage?.avatar}></UserAvatar>
+        )}
       </Wrapper>
+
       <Title>User settings</Title>
     </Container>
   );
@@ -34,16 +40,23 @@ const Title = styled.h2`
   margin-top: 10px;
 `;
 
-const UserAvatar = styled.div<{ avatar: string }>`
-  background-image: ${({ avatar }) => `url(${avatar})`};
+const ImageStyles = css`
   width: 100px;
   height: 100px;
-  border-radius: 50%;
-  outline: 8px solid ${({ theme }) => theme.colors.primary.dark};
   position: absolute;
-  z-index: 100;
   bottom: -50px;
   left: 50px;
+`;
+
+const StyledSkeleton = styled(Skeleton)`
+  ${ImageStyles};
+`;
+
+const UserAvatar = styled.div<{ avatar: string }>`
+  ${ImageStyles}
+  background-image: ${({ avatar }) => `url(${avatar})`};
+  border-radius: 50%;
+  outline: 8px solid ${({ theme }) => theme.colors.primary.dark};
   background-size: cover;
   background-position: center;
 `;

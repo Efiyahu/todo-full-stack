@@ -11,6 +11,7 @@ export type Todo = {
   status: Status;
   priority: Priority;
   date: string;
+  fullDescription: string;
   order: number;
 };
 

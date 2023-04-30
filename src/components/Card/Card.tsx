@@ -22,7 +22,7 @@ const Card = ({ index, title, description, priority, date, id, onClickDelete, on
           maxWidth: 275,
           width: '100%',
           '& .MuiPaper-root': {
-            maxHeight: 150,
+            maxHeight: 300,
             boxSizing: 'border-box',
             background: '#1E1F25',
             borderRadius: '10px',
@@ -31,7 +31,14 @@ const Card = ({ index, title, description, priority, date, id, onClickDelete, on
       >
         <MuiCard onClick={() => onClickCard(id)}>
           <StyledCardContent>
-            <StyledDeleteIcon onClick={() => onClickDelete(id)} stroke="lightgray" fill="lightgray" />
+            <StyledDeleteIcon
+              onClick={event => {
+                event.stopPropagation();
+                onClickDelete(id);
+              }}
+              stroke="lightgray"
+              fill="lightgray"
+            />
             <Priority priority={priority}>{priority}</Priority>
             <TextWrapper>
               <Title>{title}</Title>
@@ -106,6 +113,8 @@ const TextWrapper = styled.div`
 const StyledDeleteIcon = styled(Delete)`
   position: absolute;
   right: 10px;
+  width: 30px;
+  height: 30px;
   cursor: pointer;
   height: 16px;
   padding: 0 5px;

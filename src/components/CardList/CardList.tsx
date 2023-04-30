@@ -4,6 +4,7 @@ import Card from 'components/Card/Card';
 import { format } from 'date-fns';
 import { Todo } from 'types';
 import { ReactComponent as Add } from 'assets/svgs/add.svg';
+import { CircularProgress } from '@mui/material';
 
 type Props = {
   title: string;
@@ -14,6 +15,7 @@ type Props = {
   showButton?: boolean;
   onClickCard: (cardId: string) => void;
   disabledDrag: boolean;
+  isLoading: boolean;
 };
 
 const CardList = ({
@@ -25,6 +27,7 @@ const CardList = ({
   showButton = false,
   onClickCard,
   disabledDrag,
+  isLoading,
 }: Props) => (
   <MainContainer>
     <Title>
@@ -35,21 +38,26 @@ const CardList = ({
       {provided => (
         <Container ref={provided.innerRef} {...provided.droppableProps}>
           <Wrapper>
-            {data?.map(({ title: todoTitle, description, date, priority, status, id }, index) => (
-              <Card
-                onClickCard={onClickCard}
-                onClickDelete={onClickDelete}
-                index={index}
-                key={crypto.randomUUID()}
-                title={todoTitle}
-                description={description}
-                priority={priority}
-                date={format(new Date(date), 'MMM dd,yyyy')}
-                status={status}
-                id={id}
-                disabledDrag={disabledDrag}
-              />
-            ))}
+            {isLoading ? (
+              <CircularProgress style={{ alignSelf: 'center' }} />
+            ) : (
+              data?.map(({ title: todoTitle, description, date, priority, status, id, fullDescription }, index) => (
+                <Card
+                  onClickCard={onClickCard}
+                  onClickDelete={onClickDelete}
+                  index={index}
+                  key={crypto.randomUUID()}
+                  title={todoTitle}
+                  description={description}
+                  priority={priority}
+                  date={format(new Date(date), 'MMM dd,yyyy')}
+                  status={status}
+                  id={id}
+                  disabledDrag={disabledDrag}
+                  fullDescription={fullDescription}
+                />
+              ))
+            )}
             {provided.placeholder}
           </Wrapper>
         </Container>
@@ -60,14 +68,14 @@ const CardList = ({
 export default CardList;
 
 const Container = styled.div`
-  min-width: 300px;
   width: 100%;
-  height: 600px;
+  height: 500px;
   display: flex;
   flex-direction: column;
   gap: 20px;
   align-items: center;
   overflow: scroll;
+  padding-right: 10px;
 `;
 
 const Wrapper = styled.div`
@@ -82,7 +90,7 @@ const Wrapper = styled.div`
 const Title = styled.div`
   cursor: default;
   display: flex;
-  width: 100%;
+  width: 94.1%;
   min-height: 45px;
   padding: 10px 20px;
   align-items: center;

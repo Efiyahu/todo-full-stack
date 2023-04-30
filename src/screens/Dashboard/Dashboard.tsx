@@ -21,15 +21,14 @@ const Dashboard = () => {
   const {
     data: todos,
     refetch: refetchTodos,
-    isFetching: isFetchingTodos,
+    isLoading: isLoadingTodos,
   } = useQuery<Todo[]>(['getTodos'], () => API.getTodos('todo'), {
     onSuccess: data => setOriginalTodos(data),
   });
   const {
     data: inProgress,
     refetch: refetchInProgress,
-    isFetching: isFetchingInProgress,
-    isLoading,
+    isLoading: isLoadingInProgress,
   } = useQuery<Todo[]>(['getInProgress'], () => API.getTodos('progress'), {
     onSuccess: data => setOriginalInProgress(data),
   });
@@ -37,7 +36,7 @@ const Dashboard = () => {
   const {
     data: done,
     refetch: refetchDone,
-    isFetching: isFetchingDone,
+    isLoading: isLoadingDone,
   } = useQuery<Todo[]>(['getDone'], () => API.getTodos('done'), {
     onSuccess: data => setOriginalDone(data),
   });
@@ -49,6 +48,8 @@ const Dashboard = () => {
   };
 
   const [open, setOpen] = React.useState<boolean>(false);
+  const [isEditing, setIsEditing] = React.useState<boolean>(false);
+  const [currentCardId, setCurrentCardId] = React.useState<string>('');
 
   const onDragEnd = async (result: DropResult) => {
     const { source, destination } = result;
@@ -105,7 +106,9 @@ const Dashboard = () => {
   };
 
   const onClickCard = (cardId: string) => {
-    navigate(`/dashboard/${cardId}`);
+    setCurrentCardId(cardId);
+    setOpen(true);
+    setIsEditing(true);
   };
 
   return (
@@ -117,7 +120,16 @@ const Dashboard = () => {
         open={openDelete}
         onCancel={() => setOpenDelete(false)}
       />
-      <AddTodoModal open={open} handleClose={() => setOpen(false)} refetch={refetchAll} />
+      <AddTodoModal
+        cardId={currentCardId}
+        open={open}
+        handleClose={() => {
+          setOpen(false);
+          setIsEditing(false);
+        }}
+        refetch={refetchAll}
+        isEditing={isEditing}
+      />
       <Container>
         <TopWrapper>
           <Title>Dashboard</Title>
@@ -132,6 +144,7 @@ const Dashboard = () => {
             title="To Do"
             showButton
             disabledDrag={disabled}
+            isLoading={isLoadingTodos}
           />
           <CardList
             onClickCard={onClickCard}
@@ -140,6 +153,7 @@ const Dashboard = () => {
             droppableId="progress"
             title="In progress"
             disabledDrag={disabled}
+            isLoading={isLoadingInProgress}
           />
           <CardList
             onClickCard={onClickCard}
@@ -148,6 +162,7 @@ const Dashboard = () => {
             droppableId="done"
             title="Done"
             disabledDrag={disabled}
+            isLoading={isLoadingDone}
           />
         </Wrapper>
       </Container>
@@ -160,6 +175,7 @@ export default Dashboard;
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+
   gap: 40px;
   padding: 20px 40px;
 `;

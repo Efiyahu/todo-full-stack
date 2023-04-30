@@ -8,30 +8,50 @@ import API from 'api/methods';
 import Modal from './Modal';
 import Select from 'components/Select/Select';
 import { Priority, Status } from 'types';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { CircularProgress } from '@mui/material';
 
 type Props = {
   open: boolean;
+  isEditing: boolean;
   handleClose: VoidFunction;
   refetch: () => Promise<void>;
+  cardId: string;
 };
 
 export interface TodoFormValues extends FieldValues {
   title: string;
   description: string;
+  fullDescription?: string;
   priority?: Priority;
   status?: Status;
 }
 
-const AddTodoModal = ({ open, handleClose, refetch }: Props) => {
+const AddTodoModal = ({ open, handleClose, refetch, isEditing, cardId }: Props) => {
+  const { data: cardData, isFetching: isLoadingCard } = useQuery<TodoFormValues>(
+    ['getTodo'],
+    () => API.getTodo(cardId),
+    {
+      enabled: isEditing,
+    }
+  );
+
+  const { mutate: update, isLoading: isLoadingUpdate } = useMutation(['updateTodo'], API.updateTodo);
   const onSubmit: SubmitHandler<TodoFormValues> = async data => {
     for (const value in data) {
       if (data[value as keyof TodoFormValues] === '') delete data[value as keyof TodoFormValues];
     }
-    await API.addTodo(data);
+    if (isEditing) {
+      update({ updatedTodo: data, todoId: cardId });
+    } else {
+      await API.addTodo(data);
+    }
     await refetch();
     handleClose();
     reset();
   };
+
+  console.log(cardId);
 
   const validationSchema = React.useMemo(
     () =>
@@ -55,6 +75,17 @@ const AddTodoModal = ({ open, handleClose, refetch }: Props) => {
       status: 'todo',
     },
   });
+
+  React.useEffect(() => {
+    if (cardData && isEditing) {
+      reset(cardData);
+    } else if (!isEditing) {
+      reset({
+        priority: 'Low',
+        status: 'todo',
+      });
+    }
+  }, [cardData, reset, isEditing]);
 
   return (
     <Modal
@@ -89,33 +120,47 @@ const AddTodoModal = ({ open, handleClose, refetch }: Props) => {
       }}
       content={
         <>
-          <FormWrapper>
-            <Input label="Title" {...register('title')} error={!!errors.title} helperText={errors.title?.message} />
-            <Input
-              {...register('description')}
-              label="Description"
-              error={!!errors.description}
-              helperText={errors.description?.message}
-            />
-            <Select
-              autoWidth={false}
-              multiple={false}
-              native={false}
-              data={['Low', 'Medium', 'High']}
-              {...register('priority')}
-              label="Priority"
-              control={control}
-            />
-            <Select
-              control={control}
-              autoWidth={false}
-              multiple={false}
-              native={false}
-              data={['todo', 'progress', 'done']}
-              {...register('status')}
-              label="Status"
-            />
-          </FormWrapper>
+          {isLoadingCard || isLoadingUpdate ? (
+            <CircularProgress />
+          ) : (
+            <FormWrapper>
+              <Input label="Title" {...register('title')} error={!!errors.title} helperText={errors.title?.message} />
+              <Input
+                {...register('description')}
+                label="Description"
+                error={!!errors.description}
+                helperText={errors.description?.message}
+              />
+              <Select
+                autoWidth={false}
+                multiple={false}
+                native={false}
+                data={['Low', 'Medium', 'High']}
+                {...register('priority')}
+                label="Priority"
+                control={control}
+              />
+              <Select
+                control={control}
+                autoWidth={false}
+                multiple={false}
+                native={false}
+                data={['todo', 'progress', 'done']}
+                {...register('status')}
+                label="Status"
+                value={cardData?.status}
+              />
+              <Input
+                className="multiline-todo"
+                {...register('fullDescription')}
+                label="Full Description"
+                error={!!errors.fullDescription}
+                helperText={errors.fullDescription?.message}
+                multiline
+                rows={4}
+              />
+            </FormWrapper>
+          )}
         </>
       }
     />
@@ -131,4 +176,12 @@ const FormWrapper = styled.div`
   justify-content: center;
   gap: 40px;
   flex-wrap: wrap;
+
+  .multiline-todo {
+    width: 100% !important;
+
+    .MuiInputBase-root {
+      width: 100%;
+    }
+  }
 `;

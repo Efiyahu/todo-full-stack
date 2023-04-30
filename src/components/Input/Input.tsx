@@ -1,20 +1,20 @@
 import * as React from 'react';
 import { StandardTextFieldProps, TextField } from '@mui/material';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 interface Props extends StandardTextFieldProps {
   endIcon?: Element;
 }
 
-const Input = React.forwardRef<HTMLDivElement, Props>(({ label = 'text', ...props }: Props, ref) => (
-  <StyledTextField {...props} variant="outlined" label={label} ref={ref} />
+const Input = React.forwardRef<HTMLDivElement, Props>(({ label = 'text', multiline, ...props }: Props, ref) => (
+  <StyledTextField {...props} variant="outlined" label={label} ref={ref} multiline={multiline ? true : false} />
 ));
 
 Input.displayName = 'Input';
 
 export default Input;
 
-const StyledTextField = styled(TextField)`
+const StyledTextField = styled(TextField)<{ multiline: boolean }>`
   input:-webkit-autofill,
   input:-webkit-autofill:focus {
     transition: background-color 600000s 0s, color 600000s 0s !important;
@@ -22,7 +22,12 @@ const StyledTextField = styled(TextField)`
   &.MuiFormControl-root,
   .MuiInputBase-root {
     width: 280px;
-    height: 48px;
+    ${({ multiline }) =>
+      !multiline
+        ? css`
+            height: 48px;
+          `
+        : null}
     background-color: ${({ theme }) => theme.colors.primary.darkBlue};
     border-radius: 10px;
     color: ${({ theme }) => theme.colors.primary.light};
