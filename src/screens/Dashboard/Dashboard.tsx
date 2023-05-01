@@ -3,11 +3,13 @@ import * as React from 'react';
 import CardList from 'components/CardList/CardList';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import styled from 'styled-components';
-import AddTodoModal from 'components/Modal';
+import AddTodoModal from 'components/Modal/AddTodoModal';
 import { useQuery } from '@tanstack/react-query';
 import API from 'api/methods';
 import { Todo } from 'types';
 import DeleteTodo from './modals/DeleteTodo';
+import { CircularProgress } from '@mui/material';
+import Backdrop from '@mui/material/Backdrop';
 
 const Dashboard = () => {
   const [disabled, setDisabled] = React.useState<boolean>(false);
@@ -112,13 +114,6 @@ const Dashboard = () => {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <DeleteTodo
-        todoId={deleteTodoId}
-        title="Delete Todo"
-        onDelete={onDeleteTodo}
-        open={openDelete}
-        onCancel={() => setOpenDelete(false)}
-      />
       <AddTodoModal
         cardId={currentCardId}
         open={open}
@@ -129,6 +124,17 @@ const Dashboard = () => {
         refetch={refetchAll}
         isEditing={isEditing}
       />
+      <DeleteTodo
+        todoId={deleteTodoId}
+        title="Delete Todo"
+        onDelete={onDeleteTodo}
+        open={openDelete}
+        onCancel={() => setOpenDelete(false)}
+      />
+
+      <Backdrop sx={{ zIndex: 2 }} open={disabled}>
+        <CircularProgress size={60} />
+      </Backdrop>
       <Container>
         <TopWrapper>
           <Title>Dashboard</Title>

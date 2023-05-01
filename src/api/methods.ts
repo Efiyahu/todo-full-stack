@@ -80,7 +80,6 @@ const API = {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
         'Content-Type': file.type,
-        'Content-Length': `${file.size}`,
       },
     });
     return response.data;

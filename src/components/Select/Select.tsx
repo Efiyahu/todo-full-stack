@@ -35,7 +35,7 @@ const Select = React.forwardRef<HTMLDivElement, Props>(({ data, label, name, con
             defaultValue={data[0]}
           >
             {data?.map(item => (
-              <MenuItem key={crypto.randomUUID()} value={item}>
+              <MenuItem key={Date.now() * 10 + Math.floor(Math.random() * 100000)} value={item}>
                 {label === 'Priority' ? PriorityEnum[item as Priority] : StatusEnum[item as Status]}
               </MenuItem>
             ))}

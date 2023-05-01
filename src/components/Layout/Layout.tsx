@@ -28,4 +28,8 @@ export default Layout;
 const Container = styled.div`
   margin-left: 100px;
   height: 100%;
+
+  @media screen and (max-width: 880px) {
+    margin-left: 0;
+  }
 `;

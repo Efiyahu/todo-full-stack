@@ -15,23 +15,26 @@ interface Props {
   onSubmitForm?: VoidFunction;
 }
 
-const Modal = ({ open, title, asForm, content, modalStyles, buttons, containerStyles, onSubmitForm }: Props) => (
-  <MuiModal open={open} sx={modalStyles}>
-    <Container style={containerStyles}>
-      {Boolean(title) && <Title>{title}</Title>}
-      <Wrapper as={asForm ? 'form' : 'div'} onSubmit={onSubmitForm}>
-        {content}
-        {Boolean(buttons?.length) && (
-          <ButtonContainer>
-            {buttons?.map(button => (
-              <Button {...button} key={crypto.randomUUID()} />
-            ))}
-          </ButtonContainer>
-        )}
-      </Wrapper>
-    </Container>
-  </MuiModal>
-);
+const Modal = ({ open, title, asForm, content, modalStyles, buttons, containerStyles, onSubmitForm }: Props) => {
+  console.log({ buttons, containerStyles, open, title, asForm, content });
+  return (
+    <MuiModal open={open} sx={modalStyles}>
+      <Container style={containerStyles}>
+        {Boolean(title) && <Title>{title}</Title>}
+        <Wrapper as={asForm ? 'form' : 'div'} onSubmit={onSubmitForm}>
+          {content}
+          {Boolean(buttons?.length) && (
+            <ButtonContainer>
+              {buttons?.map(button => (
+                <Button {...button} key={crypto.randomUUID()} />
+              ))}
+            </ButtonContainer>
+          )}
+        </Wrapper>
+      </Container>
+    </MuiModal>
+  );
+};
 
 export default Modal;
 

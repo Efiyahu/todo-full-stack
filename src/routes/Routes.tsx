@@ -24,21 +24,15 @@ const Routes = () => {
           path: '/dashboard',
           element: <Dashboard />,
         },
-        {
-          path: '/dashboard/:id',
-          element: <div>Hello</div>,
-        },
+
         {
           path: '/settings',
           element: <User />,
         },
-        {
-          path: '/files',
-          element: <User />,
-        },
+
         {
           path: '/stats',
-          element: <User />,
+          element: <div>Stats Screen , Currently in progress...</div>,
         },
       ],
     },

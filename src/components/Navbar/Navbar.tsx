@@ -2,32 +2,32 @@ import styled, { css } from 'styled-components';
 import { ReactComponent as Dashboard } from 'assets/svgs/dashboard.svg';
 import { ReactComponent as Calendar } from 'assets/svgs/calendar.svg';
 import { ReactComponent as Settings } from 'assets/svgs/settings.svg';
-import { ReactComponent as Files } from 'assets/svgs/files.svg';
+import { useMediaQuery } from '@mui/material';
 
 type Props = {
   onClickItem: (name: string) => void;
   pathname: string;
 };
 
-const Navbar = ({ onClickItem, pathname }: Props) => (
-  <Container>
-    <ListWrapper>
-      <ListItem active={pathname?.includes('dashboard')} onClick={() => onClickItem('dashboard')}>
-        <Dashboard />
-      </ListItem>
-      <ListItem active={pathname?.includes('stats')} onClick={() => onClickItem('stats')}>
-        <Calendar />
-      </ListItem>
-      <ListItem active={pathname?.includes('settings')} onClick={() => onClickItem('settings')}>
-        <Settings />
-      </ListItem>
-      <ListItem active={pathname?.includes('files')} onClick={() => onClickItem('files')}>
-        <Files />
-      </ListItem>
-    </ListWrapper>
-  </Container>
-);
+const Navbar = ({ onClickItem, pathname }: Props) => {
+  const isMobile = useMediaQuery('(max-width: 880px)');
 
+  return !isMobile ? (
+    <Container>
+      <ListWrapper>
+        <ListItem active={pathname?.includes('dashboard')} onClick={() => onClickItem('dashboard')}>
+          <Dashboard />
+        </ListItem>
+        <ListItem active={pathname?.includes('stats')} onClick={() => onClickItem('stats')}>
+          <Calendar />
+        </ListItem>
+        <ListItem active={pathname?.includes('settings')} onClick={() => onClickItem('settings')}>
+          <Settings />
+        </ListItem>
+      </ListWrapper>
+    </Container>
+  ) : null;
+};
 export default Navbar;
 
 const Container = styled.nav`

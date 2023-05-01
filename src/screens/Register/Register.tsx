@@ -41,8 +41,6 @@ const Register = () => {
     formState: { errors },
   } = useForm<IFormValues>({ resolver: yupResolver(validationSchema) });
 
-  console.log(errors);
-
   return (
     <Container>
       <Title>Register</Title>
