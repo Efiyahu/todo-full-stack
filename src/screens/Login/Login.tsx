@@ -51,8 +51,6 @@ const Login = () => {
     formState: { errors },
   } = useForm<User>({ resolver: yupResolver(validationSchema) });
 
-  console.log(errors);
-
   return (
     <Container>
       <Title>Login</Title>

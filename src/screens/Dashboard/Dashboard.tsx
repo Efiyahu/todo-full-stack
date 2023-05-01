@@ -8,10 +8,8 @@ import { useQuery } from '@tanstack/react-query';
 import API from 'api/methods';
 import { Todo } from 'types';
 import DeleteTodo from './modals/DeleteTodo';
-import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
-  const navigate = useNavigate();
   const [disabled, setDisabled] = React.useState<boolean>(false);
   const [openDelete, setOpenDelete] = React.useState<boolean>(false);
   const [deleteTodoId, setDeleteTodoId] = React.useState<string>('');
@@ -98,6 +96,7 @@ const Dashboard = () => {
     await API.deleteTodo(todoId);
     await refetchAll();
     setOpenDelete(false);
+    setDisabled(false);
   };
 
   const onClickDelete = (todoId: string) => {

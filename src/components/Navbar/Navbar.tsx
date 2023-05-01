@@ -15,7 +15,7 @@ const Navbar = ({ onClickItem, pathname }: Props) => (
       <ListItem active={pathname?.includes('dashboard')} onClick={() => onClickItem('dashboard')}>
         <Dashboard />
       </ListItem>
-      <ListItem active={pathname?.includes('calendar')} onClick={() => onClickItem('calendar')}>
+      <ListItem active={pathname?.includes('stats')} onClick={() => onClickItem('stats')}>
         <Calendar />
       </ListItem>
       <ListItem active={pathname?.includes('settings')} onClick={() => onClickItem('settings')}>
