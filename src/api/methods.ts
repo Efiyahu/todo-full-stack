@@ -73,6 +73,18 @@ const API = {
         }
       )
       .then(res => res.data),
+  uploadImage: async ({ file, userId }: { file: File; userId: string }) => {
+    const formData = new FormData();
+    formData.append('myFile', file);
+    const response = await appRequest.patch(`/upload/${userId}`, formData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': file.type,
+        'Content-Length': `${file.size}`,
+      },
+    });
+    return response.data;
+  },
 };
 
 export default API;

@@ -51,8 +51,6 @@ const AddTodoModal = ({ open, handleClose, refetch, isEditing, cardId }: Props) 
     reset();
   };
 
-  console.log(cardId);
-
   const validationSchema = React.useMemo(
     () =>
       yup.object({
@@ -95,7 +93,7 @@ const AddTodoModal = ({ open, handleClose, refetch, isEditing, cardId }: Props) 
         handleClose();
         reset();
       }}
-      title="Add Todo"
+      title={'Add Todo'}
       asForm
       onSubmitForm={handleSubmit(onSubmit)}
       buttons={[

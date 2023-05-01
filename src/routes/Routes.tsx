@@ -37,7 +37,7 @@ const Routes = () => {
           element: <User />,
         },
         {
-          path: '/calendar',
+          path: '/stats',
           element: <User />,
         },
       ],
